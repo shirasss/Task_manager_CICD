@@ -18,8 +18,8 @@ pipeline {
                         sh "docker-compose stop"
                         sh "docker-compose down"
                         sleep time: 30, unit: 'SECONDS'  // Adjust the delay time as needed
-                        sh 'docker rmi mongo:latest'
-                        sh 'docker rmi node_image:latest'
+                        sh 'docker rmi mongo:latest  || true'
+                        sh 'docker rmi node_image:latest  || true'
                         sh "docker-compose up --build -d"
                         // sleep time: 30, unit: 'SECONDS'  // Adjust the delay time as needed
                     }
