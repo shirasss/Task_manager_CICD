@@ -1,0 +1,42 @@
+version: '3'
+services:
+  app:
+    container_name: node
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: node_image
+    ports:
+      - "4020:4000"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo
+    environment:
+        MONGO_INITDB_ROOT_USERNAME: username
+        MONGO_INITDB_ROOT_PASSWORD: password
+        MONGO_INITDB_DATABASE: database
+    restart: always
+    ports:
+      - "27017:27017"
+
+
+# services:
+#   mongodb:
+#     image: mongo
+#     environment:
+#       MONGO_INITDB_ROOT_USERNAME: your-username
+#       MONGO_INITDB_ROOT_PASSWORD: your-password
+#       MONGO_INITDB_DATABASE: your-database
+#     volumes:
+#       - ./init.js:/docker-entrypoint-initdb.d/init.js
+#       - mongo_data_vol:/data/db
+#     ports:
+#       - "27017:27017"
+
+      # - ./init.js:/docker-entrypoint-initdb.d/init.js
+
+
+#mongodb for vs code
