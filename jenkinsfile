@@ -2,31 +2,37 @@ pipeline {
     agent any
     environment {
         artifactRegistryImage = "me-west1-docker.pkg.dev/eco-tract-407114/shira-repo/chat_sql"
+        acrName = "shirarepo"  // Replace with your ACR name
     }
     stages {
         stage('Build') {
             steps {
                 echo 'Building'
-                    script {
-                        // Extract the commit hash
-                        // def commitHash = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-                        // Build the Docker image with the commit hash as the version tag
-                        // sh "docker build -t $artifactRegistryImage:$commitHash ./python/"
-                        // sh "gcloud auth configure-docker me-west1-docker.pkg.dev"
-                        // sh "docker push $artifactRegistryImage:$commitHash"
-                        echo 'Stopping and removing containers...'
-                        sh "docker-compose stop"
-                        sh "docker-compose down"
-                        sleep time: 30, unit: 'SECONDS'  // Adjust the delay time as needed
-                        sh 'docker rmi mongo:latest  || true'
-                        sh 'docker rmi node_image:latest  || true'
-                        sh "docker-compose up --build -d"
-                        // sleep time: 30, unit: 'SECONDS'  // Adjust the delay time as needed
-                    }
-                
+                script {
+                    echo 'Stopping and removing containers...'
+                    sh "docker-compose stop"
+                    sh "docker-compose down"
+                    sleep time: 30, unit: 'SECONDS'
+                    sh 'docker rmi mongo:latest  || true'
+                    sh 'docker rmi node_image:latest  || true'
+                    sh "docker-compose up --build -d"
+                }
             }
         }
 
+        stage('Push to ACR') {
+            steps {
+                script {
+                    // Extract the commit hash
+                    def commitHash = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+                    // sh "gcloud auth configure-docker me-west1-docker.pkg.dev"
+                    // Tag the Docker image
+                    sh "docker tag mongo:latest $acrName.azurecr.io/mongo:${commitHash}"
+                    
+                    // Push the Docker image to ACR
+                    sh "docker push $acrName.azurecr.io/mongo:${commitHash}"
+                }
+            }
+        }
     }
 }
-
