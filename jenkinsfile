@@ -25,12 +25,12 @@ pipeline {
                 script {
                     // Extract the commit hash
                     def commitHash = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-                    // sh "gcloud auth configure-docker me-west1-docker.pkg.dev"
+
                     // Tag the Docker image
-                    sh "docker tag mongo:latest $acrName.azurecr.io/mongo:${commitHash}"
+                    sh "docker tag mongo:latest ${acrName}.azurecr.io/mongo:${commitHash}"
                     
                     // Push the Docker image to ACR
-                    sh "docker push $acrName.azurecr.io/mongo:${commitHash}"
+                    sh "docker push ${acrName}.azurecr.io/mongo:${commitHash}"
                 }
             }
         }
