@@ -24,6 +24,8 @@ pipeline {
             steps {
                 script {
                     // Extract the commit hash
+                    echo 'the user!!!!!!!!!!!!!!!!...'
+                    sh 'whoami'
                     def commitHash = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
                     sh "az acr login --name shirarepo"
                     // Tag the Docker image
