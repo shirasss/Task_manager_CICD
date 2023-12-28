@@ -25,7 +25,7 @@ pipeline {
                 script {
                     // Extract the commit hash
                     def commitHash = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-                    sh "az acr login --name shirarepo"
+                    // sh "az acr login --name shirarepo"
                     // Tag the Docker image
                     sh "docker tag mongo:latest ${acrName}.azurecr.io/mongo:${commitHash}"
                     
