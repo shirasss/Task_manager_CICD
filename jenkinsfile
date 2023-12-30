@@ -1,19 +1,32 @@
 pipeline {
     agent any
-
+    environment {
+        ACR_NAME = 'shirarepo'
+        SERVICE_PRINCIPAL_CREDENTIALS_ID = 'AzureServicePrincipal'
+        SERVICE_PRINCIPAL_SECRET_ID = '45d0b2e8-3d09-4cc3-825e-fc54ba8851a4'
+    }
     stages {
         stage('Build') {
             steps {
                 echo 'Building'
-                script {
-                    cleanupContainers()
-                    buildAndRunContainers()
+                echo 'Stopping and removing containers...'
+                sh "docker-compose down"
+                sleep time: 10, unit: 'SECONDS'
+                echo 'Building and running containers...'
+                sh "docker-compose up --build -d"
+        // Log in to Azure Container Registry using service principal
+                withCredentials([usernamePassword(credentialsId: SERVICE_PRINCIPAL_CREDENTIALS_ID, usernameVariable: 'SP_USERNAME', passwordVariable: 'SP_PASSWORD')]) {
+                sh "docker login -u $SP_USERNAME -p $SP_PASSWORD $ACR_NAME.azurecr.io"
+                }
+                sh "docker tag mongo:latest shirarepo.azurecr.io/mongo:latest"
+        // Push the Docker image to ACR
+                sh "docker push shirarepo.azurecr.io/mongo:latest"                   
                 }
             }
         }
     }
 
-    post {
+        post {
         success {
             echo 'Pipeline succeeded!'
         }
@@ -21,26 +34,14 @@ pipeline {
             echo 'Pipeline failed!'
         }
         always {
-            cleanupUnusedImages()
+        sh "docker system prune -af"
         }
+    }
     }
 
     // Helper functions
-    def cleanupContainers() {
-        echo 'Stopping and removing containers...'
-        sh "docker-compose down"
-        sleep time: 10, unit: 'SECONDS'
-    }
 
-    def buildAndRunContainers() {
-        echo 'Building and running containers...'
-        sh "docker-compose up --build -d"
-    }
-
-    def cleanupUnusedImages() {
-        echo 'Cleaning up unused Docker images...'
-        sh "docker system prune -af"
-    }
+  
 }
 
 
@@ -61,15 +62,15 @@ pipeline {
 //             }
 //         }
 //     }
-//     post {
-//         success {
-//             echo 'Pipeline succeeded!'
-//         }
-//         failure {
-//             echo 'Pipeline failed!'
-//         }
-//         always {
-//         sh "docker system prune -af"
-//         }
-//     }
+    // post {
+    //     success {
+    //         echo 'Pipeline succeeded!'
+    //     }
+    //     failure {
+    //         echo 'Pipeline failed!'
+    //     }
+    //     always {
+    //     sh "docker system prune -af"
+    //     }
+    // }
 // }
