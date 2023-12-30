@@ -10,9 +10,8 @@ pipeline {
                 echo 'Building'
                 script {
                     echo 'Stopping and removing containers and removing unused images...'
-                    sh "docker-compose stop"
+                    // sh "docker-compose stop"
                     sh "docker-compose down"
-                    sh "docker system prune -af"
                     sleep time: 10, unit: 'SECONDS'
                     // sh 'docker rmi mongo:latest  || true'
                     // sh 'docker rmi node_image:latest  || true'
@@ -28,12 +27,24 @@ pipeline {
                     def commitHash = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
                     // sh "az acr login --name shirarepo"
                     // Tag the Docker image
-                    sh "docker tag mongo:latest ${acrName}.azurecr.io/mongo:${commitHash}"
+                    // sh "docker tag mongo:latest ${acrName}.azurecr.io/mongo:${commitHash}"
                     
                     // Push the Docker image to ACR
                     // sh "docker push ${acrName}.azurecr.io/mongo:${commitHash}"
                 }
             }
+        }
+    }
+    post {
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+        always {
+        sh "docker system prune -af"
+
         }
     }
 }
