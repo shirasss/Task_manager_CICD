@@ -12,9 +12,10 @@ pipeline {
                     echo 'Stopping and removing containers...'
                     sh "docker-compose stop"
                     sh "docker-compose down"
+                    sh "docker system prune -af"
                     sleep time: 10, unit: 'SECONDS'
-                    sh 'docker rmi mongo:latest  || true'
-                    sh 'docker rmi node_image:latest  || true'
+                    // sh 'docker rmi mongo:latest  || true'
+                    // sh 'docker rmi node_image:latest  || true'
                     sh "docker-compose up --build -d"
                 }
             }
@@ -30,7 +31,7 @@ pipeline {
                     sh "docker tag mongo:latest ${acrName}.azurecr.io/mongo:${commitHash}"
                     
                     // Push the Docker image to ACR
-                    sh "docker push ${acrName}.azurecr.io/mongo:${commitHash}"
+                    // sh "docker push ${acrName}.azurecr.io/mongo:${commitHash}"
                 }
             }
         }
