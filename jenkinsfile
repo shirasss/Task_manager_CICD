@@ -44,8 +44,6 @@ pipeline {
         }
         always {
         sh "docker system prune -af"
-        sh "docker image prune --filter "dangling=true" -f"
-
         }
     }
 }
