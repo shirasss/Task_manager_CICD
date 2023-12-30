@@ -9,7 +9,7 @@ pipeline {
             steps {
                 echo 'Building'
                 script {
-                    echo 'Stopping and removing containers...'
+                    echo 'Stopping and removing containers and removing unused images...'
                     sh "docker-compose stop"
                     sh "docker-compose down"
                     sh "docker system prune -af"
