@@ -13,9 +13,9 @@ pipeline {
                     // sleep time: 10, unit: 'SECONDS'
                     // sh 'docker rmi mongo:latest  || true'
                     // sh 'docker rmi node_image:latest  || true'
-                    sh "docker-compose up -d --force-recreate --build"
+                    // sh "docker-compose up -d --force-recreate --build"
 
-                    //    sh "docker-compose up -d --no-deps --build --force-recreate --scale service_name=2"
+                       sh "docker-compose up -d "
 
                     // sh 'docker-compose up -d --no-deps --build'
 
