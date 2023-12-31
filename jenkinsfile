@@ -20,7 +20,7 @@ pipeline {
                     sleep time: 30, unit: 'SECONDS'
 
                     // Stop and remove the old containers
-                    sh 'docker-compose down'
+                    // sh 'docker-compose down'
                   
                 }
             }
