@@ -2,13 +2,6 @@
 
 pipeline {
     agent any
-    // environment {
-    //     AZURE_SUBSCRIPTION_ID='95f6583f-2d58-44c4-a661-c2441a813234'
-    //     AZURE_TENANT_ID='fb10445e-8f9d-4520-bbbe-65f66e525c4c'
-    //     CONTAINER_REGISTRY='shirarepo'
-    //     RESOURCE_GROUP='app-run'
-    //     REPO="myapp"
-    // }
     stages {
         stage('Build') {
             steps {
@@ -16,17 +9,12 @@ pipeline {
                 script {
                     echo 'Stopping and removing containers and removing unused images...'
                     sh "docker-compose down"
+                    // sh "docker-compose up -d --no-deps --build app"
                     // sleep time: 10, unit: 'SECONDS'
                     // sh 'docker rmi mongo:latest  || true'
                     // sh 'docker rmi node_image:latest  || true'
-                    sh "docker-compose up --build -d"
-                    // withCredentials([usernamePassword(credentialsId: 'AzureServicePrincipal', passwordVariable: 'k7P8Q~Lmg9NF1eSNmLc-BuvR-j7BWphwF-s5nc3-', usernameVariable: 'da417717-5d17-4f95-8543-a2e1cc59952f')]) {
-                    //         sh 'az login --service-principal -u da417717-5d17-4f95-8543-a2e1cc59952f -p k7P8Q~Lmg9NF1eSNmLc-BuvR-j7BWphwF-s5nc3- -t fb10445e-8f9d-4520-bbbe-65f66e525c4c'
-                    //         sh 'az account set -s $AZURE_SUBSCRIPTION_ID'
-                    //         sh 'az acr login --name $CONTAINER_REGISTRY --resource-group $RESOURCE_GROUP'
-                    //         sh "docker tag mongo:latest shirarepo.azurecr.io/app:1"
-                    //         sh "docker push shirarepo.azurecr.io/app:1"
-                    //     }
+                    // sh "docker-compose up --build -d"
+                  
                 }
             }
         }
