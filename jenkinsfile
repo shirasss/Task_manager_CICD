@@ -13,7 +13,7 @@ pipeline {
                     // sleep time: 10, unit: 'SECONDS'
                     // sh 'docker rmi mongo:latest  || true'
                     // sh 'docker rmi node_image:latest  || true'
-                    sh "docker-compose up --build -d"
+                    sh "docker-compose up --build"
                   
                 }
             }
