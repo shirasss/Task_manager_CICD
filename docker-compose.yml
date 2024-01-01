@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     image: node_image
     ports:
-      - "4020:4000"
+      - "80:4000"
     environment:
       - NODE_ENV=development
     depends_on:
