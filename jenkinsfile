@@ -15,7 +15,7 @@ pipeline {
                     // sh 'docker rmi node_image:latest  || true'
                     // sh "docker-compose up -d --force-recreate --build"
                     // sh "docker-compose up -d  --force-recreate --build"
-                       די "docker-compose up -d --build"
+                       sh "docker-compose up -d --build"
                     // sh 'docker-compose up -d --no-deps --build'
 
                     // Pause for a short time to allow new containers to start
