@@ -15,7 +15,7 @@ steps:
 - task: Docker@2
   inputs:
     containerRegistry: 'DockerHub'
-    repository: 'shira'
+    repository: 'shirashani/shira'
     command: 'buildAndPush'
     Dockerfile: 'Dockerfile'
     buildContext: '.'
