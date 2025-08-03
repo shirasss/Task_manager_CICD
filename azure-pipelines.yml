@@ -6,7 +6,7 @@
 trigger: none
 
 pool:
-  name: : 
+  name: Local-Agent-Pool
 
 steps:
 - script: echo Hello, world!
